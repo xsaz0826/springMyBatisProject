@@ -32,14 +32,16 @@ public class BoardController {
 	public String boardInsert(Board board, Model model) {
 		log.info("insert board=" + board.toString());
 		try {
-			boardService.create(board);
+			int count = boardService.create(board);
+			if (count > 0) {
+				model.addAttribute("message", "%s 님의 게시판이 등록되었습니다.".formatted(board.getWriter()));
+				return "board/success";
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			model.addAttribute("message", "%s 님의 게시판이 등록 실패하였습니다.".formatted(board.getWriter()));
-			return "board/failed";
 		}
-		model.addAttribute("message", "%s 님의 게시판이 등록되었습니다.".formatted(board.getWriter()));
-		return "board/success";
+		model.addAttribute("message", "%s 님의 게시판이 등록 실패하였습니다.".formatted(board.getWriter()));
+		return "board/failed";
 	}
 
 	@GetMapping("/boardList")
@@ -75,14 +77,16 @@ public class BoardController {
 	public String boardDelete(Board board, Model model) {
 		log.info("boardDelete board=" + board.toString());
 		try {
-			boardService.delete(board);
+			int count = boardService.delete(board);
+			if (count > 0) {
+				model.addAttribute("message", "%d 번 게시판이 삭제되었습니다.".formatted(board.getNo()));
+				return "board/success";
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			model.addAttribute("message", "%d 번 게시판을 삭제하는 데 실패하였습니다.".formatted(board.getNo()));
-			return "board/failed";
 		}
-		model.addAttribute("message", "%d 번 게시판이 삭제되었습니다.".formatted(board.getNo()));
-		return "board/success";
+		model.addAttribute("message", "%d 번 게시판을 삭제하는 데 실패하였습니다.".formatted(board.getNo()));
+		return "board/failed";
 	}
 
 	@GetMapping("/updateForm")
@@ -105,26 +109,27 @@ public class BoardController {
 	public String boardUpdate(Board b, Model model) {
 		log.info("boardUpdate board=" + b.toString());
 		try {
-			boardService.update(b);
+			int count = boardService.update(b);
+			if (count > 0) {
+				model.addAttribute("message", "%s 님의 게시판이 수정되었습니다.".formatted(b.getWriter()));
+				return "board/success";
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			model.addAttribute("message", "%s 님의 게시판을 수정하는 데 실패하였습니다.".formatted(b.getWriter()));
-			return "board/failed";
 		}
-		model.addAttribute("message", "%s 님의 게시판이 수정되었습니다.".formatted(b.getWriter()));
-		return "board/success";
+		model.addAttribute("message", "%s 님의 게시판을 수정하는 데 실패하였습니다.".formatted(b.getWriter()));
+		return "board/failed";
 	}
 
 	@GetMapping("/search")
 	public String boardSearch(Board board, Model model) {
-		log.info("boardSearch board"+board.toString());
+		log.info("boardSearch board" + board.toString());
 		try {
 			List<Board> boardList = boardService.search(board);
 			model.addAttribute("boardList", boardList);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 		return "board/boardList";
 	}
 }

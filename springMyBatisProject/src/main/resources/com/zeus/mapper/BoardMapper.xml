@@ -21,11 +21,11 @@
 		DELETE FROM mybatisBoard WHERE no = #{no}
 	</delete>
 	<select id="list" resultType="Board"> 
-<![CDATA[ 
-SELECT no, title, content, writer, regDate 
-FROM mybatisBoard WHERE no > 0 
-ORDER BY no DESC, regDate DESC 
-]]>
+		<![CDATA[ 
+		SELECT no, title, content, writer, regDate 
+		FROM mybatisBoard WHERE no > 0 
+		ORDER BY no DESC, regDate DESC 
+		]]>
 	</select>
 	<select id="search" resultType="Board">
 		SELECT * FROM mybatisBoard
